@@ -1,0 +1,4 @@
+baseURL = "https://adamfaryna.com/"
+languageCode = "en-us"
+title = "Adam Faryna"
+enableRobotsTXT = true

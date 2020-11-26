@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="{{ with site.LanguageCode }}{{ . }}{{ else }}en-US{{ end }}">
+  {{ partial "head.html" . }}
+
+  <body>
+    <!--
+    <div class="loader">
+      <div class="loader_div"></div>
+    </div>
+    -->
+
+    {{ partial "header.html" . }}
+
+    <div id="content">
+      {{ block "main" . }}{{ end }}
+    </div>
+    {{ partial "footer.html" . }}
+  </body>
+</html>

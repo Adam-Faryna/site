@@ -1,0 +1,29 @@
+{{ define "main" }}
+
+{{ partial "page-title.html" . }}
+
+<section class="section">
+  <div class="container">
+    <div class="row">
+      <div class="col">ala ma kota</div>
+      <div class="col">
+        <img alt="" src="/images/Adam Faryna.jpg" />
+      </div>
+
+      <div class="col-lg-9">
+        <div class="content">
+          {{.Content }}
+          {{ if .Params.CTA }}
+          {{ with .Params.CTA }}
+          <div class="text-center">
+            {{ partial "cta-button.html" (dict "CTA" (dict "URL" .URL "title" .title "target" .target)) }}
+          </div>
+          {{ end }}
+          {{ end }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ end }}

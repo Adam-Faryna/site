@@ -1,0 +1,168 @@
+<footer class="main-footer">
+  <div class="container">
+    <ul class="footer-menu">
+      {{ range site.Menus.main }}
+      <li>
+        <a href="{{ .URL | relURL}}">{{ .Name }}</a>
+      </li>
+      {{ end }}
+    </ul>
+
+    <div class="copyrigt_text d-flex justify-content-between">
+      <span>© Copyright {{ dateFormat "2006" site.Params.startYear }}-{{now.Format "2006"}} AdamFaryna.com&nbsp;<span class="dot">·</span>
+        <span class="footer-links">
+          {{ range $index, $item := site.Params.footer.links }}
+          {{ if ne $index 0 }}|{{ end }}
+          <a href="{{ .URL | relURL}}">{{ .label }}</a>
+          {{ end }}
+        </span>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<div id="consent-container">
+  <i title="Cookie consent" class="fas fa-cookie-bite trigger"></i>
+  <div class="content">
+    <span class="description">This website uses cookies to enhance site navigation, analyse site usage, and assist in our marketing efforts. Without cookies some feature may not be available. By clicking "Accept cookies" you agree to our <a href="/privacy-policy" class="consent-cookie-policy">Cookie Policy</a>.</span>
+    <form>
+			<div class="option">
+        <label>
+          <input type="checkbox" name="necessary" checked="checked" disabled="disabled"><span>Necessary</span>
+        </label>
+      </div>
+			<div class="option">
+        <label>
+          <input type="checkbox" name="marketing"><span>Marketing</span>
+        </label>
+      </div>
+			<div class="option">
+        <label>
+          <input type="checkbox" name="analytics"><span>Analytics</span>
+        </label>
+      </div>
+      <div class="buttons"><button type="button" class="save">Save</button><button type="button" class="accept-all">Accept All</button></div>
+    </form>
+  </div>
+</div>
+
+
+{{ if site.Params.cookies.enable }}
+<!-- cookie -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
+<div id="js-cookie-box" class="cookie-box cookie-box-hide">
+	This site uses cookies. By continuing to use this website, you agree to their use. <span id="js-cookie-button" class="btn btn-sm btn-primary ml-2">I Accept</span>
+</div>
+<script>
+	(function ($) {
+		const cookieBox = document.getElementById('js-cookie-box');
+		const cookieButton = document.getElementById('js-cookie-button');
+		if (!Cookies.get('cookie-box')) {
+			cookieBox.classList.remove('cookie-box-hide');
+			cookieButton.onclick = function () {
+				Cookies.set('cookie-box', true, {
+					expires: {{ site.Params.cookies.expire_days }}
+				});
+				cookieBox.classList.add('cookie-box-hide');
+			};
+		}
+	})(jQuery);
+</script>
+{{ end }}
+
+{{ if site.Params.modal.enable }}
+{{ with site.Params.modal }}
+<div id="joiningPopup" class="white-popup mfp-hide custom_mfp_popup">
+  <div class="modal-content">
+    <!-- Modal Header -->
+    <div class="modal-header text-center">
+      <h3 class="modal-title">Request for a Quote</h3>
+      <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam</p>
+      <button title="Close (Esc)" type="button" class="mfp-close">×</button>
+    </div>
+    <!-- Modal body -->
+    <div class="modal-body">
+      <div class="get_quote_form">
+        <form>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="text" class="form-control" name="name" placeholder="Enter Your Name">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="text" class="form-control" name="name" placeholder="Enter Phone No.">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="email" class="form-control" name="name" placeholder="Enter Email Address">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <textarea class="form-control" placeholder="Enter Your Message"></textarea>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn">Submit Your Request</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}
+{{ end }}
+
+
+<!-- JS Plugins -->
+{{ range site.Params.static.js }}
+{{ partial "script" (dict "link" .link "async" .async "defer" .defer) }}
+{{ end }}
+
+
+<!-- JS Assets -->
+{{ range site.Params.assets.js }}
+{{ partial "script" (dict "link" .link "async" .async "defer" .defer "asset" true) }}
+{{ end }}
+
+
+{{ with site.Params.google_analytics_id }}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ . }}"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+</script>
+{{ end }}
+
+{{ with site.Params.facebook_id }}
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                                      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script', 'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '{{ . }}');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id={{ . }}&ev=PageView&noscript=1" /></noscript>
+<!-- End Facebook Pixel Code -->
+{{ end }}
+
+{{ partial "script" (dict "link" "js/consent.js" "asset" true "buildParams" (dict "gaId" site.Params.google_analytics_id)) }}
+
+
+{{ partial "script" (dict "link" "plugins/lazyload.min.js") }}
+<script>
+  var lazyLoadInstance = new LazyLoad({
+    elements_selector: ".lazyload",
+    use_native: true
+  });
+</script>
+
+<script src="//widget.manychat.com/996581947154536.js" async="async"></script>
